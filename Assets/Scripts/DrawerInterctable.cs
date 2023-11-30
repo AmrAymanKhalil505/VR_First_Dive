@@ -14,6 +14,8 @@ public class DrawerInterctable : XRGrabInteractable
     private Vector3 limitPositions;
     [SerializeField] float drawerLimitZ = 0.8f;
     [SerializeField] private Vector3 limitDistances = new Vector3(.02f,.02f,0);
+    [SerializeField] private float differanceTranDrawer = 0.1f;
+    
     void Start()
     {   
         if(keySocket != null)
@@ -68,37 +70,46 @@ public class DrawerInterctable : XRGrabInteractable
 
     private void CheckLimits()
     {
-        if(transform.localPosition.x >= limitPositions.x + limitDistances.x ||
-            transform.localPosition.x <= limitPositions.x - limitDistances.x)
+        if (isAway())
         {
             ChangeLayerMask(defaultLayer);
         }
-        else if(transform.localPosition.y >= limitPositions.y + limitDistances.y ||
-            transform.localPosition.y <= limitPositions.y - limitDistances.y)
-        {
-            ChangeLayerMask(defaultLayer);
-        }
+        // if(transform.localPosition.x >= limitPositions.x + limitDistances.x ||
+        //     transform.localPosition.x <= limitPositions.x - limitDistances.x)
+        // {
+        //     ChangeLayerMask(defaultLayer);
+        // }
+        // else if(transform.localPosition.y >= limitPositions.y + limitDistances.y ||
+        //     transform.localPosition.y <= limitPositions.y - limitDistances.y)
+        // {
+        //     ChangeLayerMask(defaultLayer);
+        // }
         else if(drawerTransform.localPosition.z <= limitPositions.z - limitDistances.z)
         {
-            isGrabbed = false;
+            // isGrabbed = false;
             drawerTransform.localPosition = limitPositions;
-            ChangeLayerMask(defaultLayer);
+            // ChangeLayerMask(defaultLayer);
         }
         else if(drawerTransform.localPosition.z >= drawerLimitZ + limitDistances.z)
         {
-            isGrabbed = false;
+            // isGrabbed = false;
             drawerTransform.localPosition = new Vector3(
                 drawerTransform.localPosition.x,
                 drawerTransform.localPosition.y,
                 drawerLimitZ
             );
-            ChangeLayerMask(defaultLayer);
+            // ChangeLayerMask(defaultLayer);
         }
     }
 
     private void ChangeLayerMask(string mask)
     {
         interactionLayers = InteractionLayerMask.GetMask(mask);
+    }
+
+    private bool isAway()
+    {
+        return Vector3.Distance(transform.position, drawerTransform.position) > differanceTranDrawer;
     }
 
 }

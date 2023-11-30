@@ -17,12 +17,12 @@ TagManager:
   - NavMesh
   - BackgroundImage
   - DistantHotspot
-  - 
-  - 
+  - Grabbing
+  - Grabbable
   - Character
   - CharacterOutline
-  - 
-  - 
+  - Hand
+  - HandPlayer
   - 
   - 
   - 
