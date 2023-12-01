@@ -6,6 +6,8 @@ using UnityEngine.XR;
 using UnityEngine.SpatialTracking;
 using NaughtyAttributes;
 using System;
+using System.Collections;
+
 
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 // ready for new input system implementation 
@@ -104,8 +106,18 @@ public class AutoHandPlayerControllerInputSimulator : MonoBehaviour
     private Vector2 mouseDeltaPosition = Vector2.zero;
     private Vector2 mouseScrollDelta = Vector2.zero;
 
+
     private void Start()
     {
+        StartCoroutine(LateStart(2f));
+
+    }
+
+     IEnumerator LateStart(float waitTime)
+    {
+
+        yield return new WaitForSeconds(waitTime);
+       
         var activeXRSystemName = XRGeneralSettings.Instance?.Manager?.activeLoader.name;
 
         // Check for MockHMD OR Open XR, if it is not running, then don't do anything
@@ -113,7 +125,7 @@ public class AutoHandPlayerControllerInputSimulator : MonoBehaviour
         {
             Debug.Log("From AutohandSim: an active XR system was found, aborting simulation (XR system was: [" + activeXRSystemName + "])");
             isSimulating = false;
-            return;
+            yield return null;
         }
 
         // Check for active HMD's displaying the game, if none, then continue, otherwise don't do anything
@@ -128,7 +140,7 @@ public class AutoHandPlayerControllerInputSimulator : MonoBehaviour
         }
 
         if (areHMDsConnected)
-            return;
+            yield return null;
         else
             isSimulating = true;
 
